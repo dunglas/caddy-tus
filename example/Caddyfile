@@ -1,0 +1,23 @@
+{
+	frankenphp
+	admin off
+	auto_https off
+}
+
+http://localhost:8080 {
+	root public
+
+	tus {
+		base_path /files/
+		dir {$TUS_DIR:./uploads}
+		max_size 1GB
+		ietf_draft
+		hook_uri /tus-hook.php
+		hooks pre-create pre-finish
+	}
+
+	php_server {
+		# Only set on hook sub-requests: clients cannot forge it.
+		env TUS_HOOK {http.vars.tus_hook}
+	}
+}
